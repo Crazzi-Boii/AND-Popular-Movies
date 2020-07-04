@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/showBy"
+        android:title="Show By"
+        app:showAsAction="ifRoom">
+
+        <menu>
+                <item
+                    android:id="@+id/popular_movies"
+                    android:title="Popularity"/>
+                <item
+                    android:id="@+id/mosted_rated"
+                    android:title="Most Rated"/>
+        </menu>
+
+    </item>
+</menu>

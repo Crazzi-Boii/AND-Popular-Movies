@@ -1,9 +1,7 @@
-package com.nd.popularmovies;
+package com.nd.popularmovies.Activities;
 
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,57 +10,42 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nd.popularmovies.Adapters.MovieListAdapter;
 import com.nd.popularmovies.Network.RetrofitNetworkCalls;
+import com.nd.popularmovies.R;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private MovieListAdapter movieListAdapter;
     private ProgressBar progressBar;
     private TextView errTextView;
-
     private View view;
+    private int selectedFlag = 1;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.loading_indicator_pb);
-        progressBar.setVisibility(View.VISIBLE);
-        recyclerView = findViewById(R.id.recyclerview_movieFront);
         errTextView = findViewById(R.id.error_msg_tv);
-
+        recyclerView = findViewById(R.id.recyclerview_movieFront);
         view = getWindow().getDecorView().getRootView();
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
-        Log.e("onCreate: ", "" + connectivityManager.isDefaultNetworkActive());
-        if (!connectivityManager.isDefaultNetworkActive())
+        if (checkInternetConnectivity()) {
+            showBuffer();
             RetrofitNetworkCalls.apiCallPopular(this, view);
-        else {
-            progressBar.setVisibility(View.INVISIBLE);
-            errTextView.setVisibility(View.VISIBLE);
-
-        }
-
-
+        } else
+            showErr();
     }
 
-
-    //  RECYCLER VIEW INITIALIZED
-   /* public void initRecyclerView(List<MovieData> movieData) {
-
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
-        movieListAdapter = new MovieListAdapter(movieData);
-        recyclerView.setAdapter(movieListAdapter);
-        recyclerView.setVisibility(View.VISIBLE);
-    }*/
+    // Checking Internet Connection
+    private boolean checkInternetConnectivity() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
 
     //  HANDLING MENU
     @Override
@@ -71,24 +54,55 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.mainmenu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.popular_movies:
                 //Toast.makeText(this, "popular", Toast.LENGTH_SHORT).show();
-                RetrofitNetworkCalls.apiCallPopular(this, view);
-                recyclerView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+                selectedFlag = 1;
+                makeCall();
                 return true;
             case R.id.mosted_rated:
                 //Toast.makeText(this, "Most Rated", Toast.LENGTH_SHORT).show();
-                RetrofitNetworkCalls.apiCallMostRated(this, view);
-                recyclerView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+                selectedFlag = 2;
+                makeCall();
+                return true;
+            case R.id.Action_Refersh:
+                makeCall();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Polishing UI
+    private void showErr() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        errTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showBuffer() {
+        errTextView.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    // Making Network calls
+    private void makeCall() {
+        if (selectedFlag == 1)
+            if (checkInternetConnectivity()) {
+                showBuffer();
+                RetrofitNetworkCalls.apiCallPopular(this, view);
+            } else
+                showErr();
+        if (selectedFlag == 2)
+            if (checkInternetConnectivity()) {
+                showBuffer();
+                RetrofitNetworkCalls.apiCallMostRated(this, view);
+            } else
+                showErr();
     }
 }

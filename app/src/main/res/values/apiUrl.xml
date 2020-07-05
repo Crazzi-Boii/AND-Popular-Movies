@@ -4,5 +4,4 @@
     <string name="Base_URL_Popular">popular</string>
     <string name="Base_URL_Top_Rated">top_rated</string>
     <string name="Base_URL_Image">http://image.tmdb.org/t/p/w500</string>
-    <string name="Base_URL_Image_Optional">http://image.tmdb.org/t/p/w1280</string>
 </resources>

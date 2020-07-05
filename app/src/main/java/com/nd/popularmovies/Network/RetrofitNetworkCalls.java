@@ -1,9 +1,9 @@
 package com.nd.popularmovies.Network;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,25 +36,17 @@ public class RetrofitNetworkCalls {
             public void onResponse(Call<MovieDataResponse> call, Response<MovieDataResponse> response) {
                 List<MovieData> movieData = response.body().getMovieDataResults();
                 MovieData.setfList(movieData);
-                //MovieListAdapter.setA(movieData);
                 RetrofitNetworkCalls.initRecyclerView(view, context, movieData);
             }
-
             @Override
             public void onFailure(Call<MovieDataResponse> call, Throwable t) {
-
+                Toast.makeText(context, "Refresh Again", Toast.LENGTH_LONG).show();
             }
         });
 
-        if (call.isExecuted()) {
-            Log.e("apiCallPopular: ", "EXECUTED");
-            //MovieListAdapter.setA(MovieData.getfList());
-        }
-
-
     }
 
-    public static int apiCallMostRated(Context context, View view) {
+    public static void apiCallMostRated(Context context, View view) {
         Call<MovieDataResponse> call = RetrofitClient
                 .getInstance(context)
                 .getApi()
@@ -71,16 +63,9 @@ public class RetrofitNetworkCalls {
 
             @Override
             public void onFailure(Call<MovieDataResponse> call, Throwable t) {
-
+                Toast.makeText(context, "Refresh Again", Toast.LENGTH_LONG).show();
             }
         });
-
-        if (call.isExecuted()) {
-            Log.e("apiCallPopular: ", "EXECUTED");
-            //MovieListAdapter.setA(MovieData.getfList());
-        }
-
-        return 0;
     }
 
     //  RECYCLER VIEW INITIALIZED

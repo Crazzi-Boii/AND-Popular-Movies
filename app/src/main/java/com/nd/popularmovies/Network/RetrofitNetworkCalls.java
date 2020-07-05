@@ -1,6 +1,7 @@
 package com.nd.popularmovies.Network;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nd.popularmovies.Activities.MovieDetails;
 import com.nd.popularmovies.Adapters.MovieListAdapter;
 import com.nd.popularmovies.Api.RetrofitClient;
 import com.nd.popularmovies.BuildConfig;
@@ -42,6 +44,7 @@ public class RetrofitNetworkCalls {
             @Override
             public void onFailure(Call<MovieDataResponse> call, Throwable t) {
                 Toast.makeText(context, "Refresh Again", Toast.LENGTH_LONG).show();
+                //Log.e( "onFailure: ", t.getMessage());
             }
         });
 
@@ -78,7 +81,10 @@ public class RetrofitNetworkCalls {
         MovieListAdapter movieListAdapter = new MovieListAdapter(movieData, new MovieListAdapter.MovieListAdapterOnClickHandler() {
             @Override
             public void onClick(MovieData movieData) {
-                Toast.makeText(context, movieData.getMovieOriginalTitle(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, movieData.getMovieOriginalTitle(), Toast.LENGTH_SHORT).show();
+                MovieData.setMovieData(movieData);
+                Intent intent = new Intent(context, MovieDetails.class);
+                context.startActivity(intent);
             }
         });
         recyclerView.setAdapter(movieListAdapter);

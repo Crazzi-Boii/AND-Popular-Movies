@@ -60,12 +60,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.popular_movies:
-                //Toast.makeText(this, "popular", Toast.LENGTH_SHORT).show();
                 selectedFlag = 1;
                 makeCall();
                 return true;
             case R.id.mosted_rated:
-                //Toast.makeText(this, "Most Rated", Toast.LENGTH_SHORT).show();
                 selectedFlag = 2;
                 makeCall();
                 return true;

@@ -1,7 +1,5 @@
 package com.nd.popularmovies.Models;
 
-import android.util.Log;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,6 +9,8 @@ public class MovieData {
 
     private static boolean isUpdated = false;
     private static List<MovieData> fList = null;
+    private static MovieData movieData;
+
     @SerializedName("title")
     @Expose
     private String movieTitle;
@@ -52,7 +52,6 @@ public class MovieData {
     }
 
     public static void setfList(List<MovieData> fList) {
-        Log.e("setfList: ", "" + fList.size());
         if (fList == null) {
             MovieData.fList = fList;
             MovieData.isUpdated = true;
@@ -86,6 +85,14 @@ public class MovieData {
 
     public String getMovieReleaseDate() {
         return movieReleaseDate;
+    }
+
+    public static MovieData getMovieData() {
+        return movieData;
+    }
+
+    public static void setMovieData(MovieData movieData) {
+        MovieData.movieData = movieData;
     }
 
 }

@@ -26,6 +26,7 @@ public class RetrofitNetworkCalls {
 
     public static void apiCallPopular(Context context, View view) {
 
+
         Call<MovieDataResponse> call = RetrofitClient
                 .getInstance(context)
                 .getApi()
@@ -74,7 +75,12 @@ public class RetrofitNetworkCalls {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview_movieFront);
         GridLayoutManager layoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        MovieListAdapter movieListAdapter = new MovieListAdapter(movieData);
+        MovieListAdapter movieListAdapter = new MovieListAdapter(movieData, new MovieListAdapter.MovieListAdapterOnClickHandler() {
+            @Override
+            public void onClick(MovieData movieData) {
+                Toast.makeText(context, movieData.getMovieOriginalTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
         recyclerView.setAdapter(movieListAdapter);
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.VISIBLE);

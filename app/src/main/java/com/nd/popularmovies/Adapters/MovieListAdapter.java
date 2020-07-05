@@ -21,9 +21,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     private Context context;
 
-    public MovieListAdapter(List<MovieData> movieData) {
-        this.movieData = movieData;
-    }
+    private final MovieListAdapterOnClickHandler mClickHandler;
 
 
     @NonNull
@@ -49,11 +47,32 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         return movieData.size();
     }
 
-    public class MovieListAdapterViewHolder extends RecyclerView.ViewHolder {
+    public MovieListAdapter(List<MovieData> movieData, MovieListAdapterOnClickHandler mClickHandler) {
+        this.mClickHandler = mClickHandler;
+        this.movieData = movieData;
+    }
+
+    public interface MovieListAdapterOnClickHandler {
+        void onClick(MovieData movieData);
+    }
+
+    public class MovieListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView moviePosterImageView;
+
         public MovieListAdapterViewHolder(View view) {
             super(view);
             moviePosterImageView = view.findViewById(R.id.IV_movie_poster);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            //Toast.makeText(context, "Hello World", Toast.LENGTH_SHORT).show();
+            int adapterPosition = getAdapterPosition();
+            MovieData mMovieData = movieData.get(adapterPosition);
+            mClickHandler.onClick(mMovieData);
+
         }
     }
+
 }

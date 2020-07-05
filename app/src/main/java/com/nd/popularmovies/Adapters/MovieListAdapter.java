@@ -9,14 +9,28 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nd.popularmovies.Models.MovieData;
 import com.nd.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieListAdapterViewHolder> {
 
-     private int a[];
+    private int[] a;
+    private List<MovieData> movieData;
+
 
     private Context context;
+
+    public MovieListAdapter(List<MovieData> movieData) {
+        this.movieData = movieData;
+    }
+
+    /*public MovieListAdapter(List<MovieData> getfList) {
+        this.movieData = getfList;
+    }*/
+
     @NonNull
     @Override
     public MovieListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -29,22 +43,26 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     @Override
     public void onBindViewHolder(@NonNull MovieListAdapterViewHolder holder, int position) {
+        //movieData.get(position).getMoviePoster()      "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg"
+        String url = context.getString(R.string.Base_URL_Image) + movieData.get(position).getMoviePoster();
+        //Log.e( "onBindViewHolder: ", url);
         Picasso.with(context)
-                .load("http://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg")
+                .load(url)
                 .into(holder.moviePosterImageView);
     }
 
     @Override
     public int getItemCount() {
-        return a.length;
+        return movieData.size();
     }
 
-    public void setA(int[] a) {
-        this.a = a;
+    /*public static void setA(List<MovieData> movieData) {
+        MovieListAdapter.movieData = movieData;
     }
-
+*/
     public class MovieListAdapterViewHolder extends RecyclerView.ViewHolder {
         public final ImageView moviePosterImageView;
+
         public MovieListAdapterViewHolder(View view) {
             super(view);
             moviePosterImageView = view.findViewById(R.id.IV_movie_poster);
